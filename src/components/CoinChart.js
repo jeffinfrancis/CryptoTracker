@@ -8,7 +8,7 @@ import Chart from 'chart.js/auto';
 
 export default function CoinChart(props) {
 
-   const {coin}=props
+   //const {coin}=props
 
    const chartContainer=
      {
@@ -27,27 +27,23 @@ export default function CoinChart(props) {
    
    const fectchHistoryData=async()=>{
 
-   const {data}= await axios.get(HistoricalChart("solana",365,currency))
+   const {data}= await axios.get(HistoricalChart(props.coin,365,currency))
     
      data&&setHistoricalData(data.prices)
 
    }
 
-   useEffect(()=>{
-    
-     fectchHistoryData()
+   useEffect(()=>{  
+      fectchHistoryData()
    
-},[])
-
-   console.log("hisdata",historicalData);
+},[currency])
    
 
 
-  
-
-
+   
   return (
-    <div>{!historicalData?(
+    <div>
+      {!historicalData?(
       <CircularProgress style={{color:"gold"}} size={250} thickness={1}/>
     ):<> 
     {

@@ -25,19 +25,19 @@ const Banner = () => {
               }}>
                 <Typography variant="h2" sx={{
                   fontWeight:"bold",
-                  marginBottom:15,
+                  
                   fontFamily:"Montserrat"
                 }}>
                      Crypto Hunter
-                     <Typography variant='subtitle1' sx={{
+                     
+                </Typography>
+                <Typography variant='subtitle1' sx={{
                   color:"darkgrey",
                   textTransformation:"capitalize",
-                  fontFamily:"Montserrat"
+                  fontFamily:"Montserrat",marginBottom:15,
                 }}>
                 Get all the info regarding your favorite crypto currency
                 </Typography>
-                </Typography>
-              
               </div>
               <Carousal/>
       </Container>

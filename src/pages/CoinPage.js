@@ -2,25 +2,30 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { SingleCoin } from '../config/api';
-import {Typography} from '@mui/material'
+import {LinearProgress, Typography} from '@mui/material'
 import CoinChart from '../components/CoinChart';
+import { CryptoState } from '../CryptoContext';
+import parse from 'html-react-parser'
 
 const CoinPage = () => {
     const {id}=useParams()
     
     const [singleCoin,setSingleCoin]=useState({})
 
+    const {symbol,currency}=CryptoState()
+
     const fetchSingleCoin=async()=>{
        const {data}=await axios.get(SingleCoin(id))
        setSingleCoin(data)
        
     }
-
     useEffect(()=>{
         fetchSingleCoin();
-        singleCoin&& console.log(singleCoin);
+       
     },[])
-
+    const numberWithCommas=(num)=>{
+      return !singleCoin?0:num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     const styles ={
       container :{
         display:"flex",
@@ -41,7 +46,10 @@ const CoinPage = () => {
 
     }
 
+
   return (
+    <div>
+    {!singleCoin?(<LinearProgress color='gold'/>):
     <div style={styles.container}>
   <div style={styles.sidebar}>
   <img
@@ -49,32 +57,28 @@ const CoinPage = () => {
         height="200" alt='coin'
     style={{marginBottom:20}}
         />
-         <Typography gutterBottom variant="h5" component="div">
+         <Typography gutterBottom variant="h3" component="div">
           {singleCoin.id}
         </Typography>
         <Typography variant="body2" color="white">
-         {singleCoin?.description?.bg.split('.')[0]}
+         {(singleCoin?.description?.bg?.split('.')[0])}
+         
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
         Rank : {singleCoin?.market_cap_rank}
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
-        Current Price : {singleCoin?.market_data?.current_price?.cad}
+        Current Price : {symbol}{" "}{singleCoin?.market_data?.current_price[currency.toLowerCase()]}
         </Typography>
         <Typography gutterBottom variant="h6" component="div">
-        Market Cap : {singleCoin?.id}
+        Market Cap : {symbol}{" "}{numberWithCommas(Number(singleCoin?.market_data?.market_cap[currency.toLowerCase()]))?.slice(0,-6)}M
         </Typography>
   </div>
- 
-        
-     
-     
     
-    
-       {singleCoin&& <CoinChart coin={singleCoin}/> }
+       {singleCoin&& <CoinChart coin={id}/> }
     
 </div>
-  )
+}</div>)
 }
 
 export default CoinPage
